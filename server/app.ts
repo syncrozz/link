@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, Router } from 'express';
 import { storage } from './storage.ts';
 
 export function createApp() {
@@ -14,11 +14,9 @@ export function createApp() {
     next();
   });
 
-  // ==========================================
-  // API ROUTES (Must be registered FIRST)
-  // ==========================================
+  const apiRouter = Router();
 
-  app.get('/api/health', (req: Request, res: Response) => {
+  apiRouter.get('/health', (req: Request, res: Response) => {
     res.json({
       status: 'ok',
       product: 'SYNCROZZ Link v1.0',
@@ -28,7 +26,7 @@ export function createApp() {
   });
 
   // Get all links directly from Firestore
-  app.get('/api/links', async (req: Request, res: Response) => {
+  apiRouter.get('/links', async (req: Request, res: Response) => {
     try {
       const search = (req.query.search as string || '').trim();
       const links = await storage.getAllLinks(search);
@@ -43,13 +41,13 @@ export function createApp() {
         },
       });
     } catch (err: any) {
-      console.error('API /api/links error:', err);
+      console.error('API /links error:', err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Create link in Firestore with uniqueness guarantee
-  app.post('/api/links', async (req: Request, res: Response) => {
+  apiRouter.post('/links', async (req: Request, res: Response) => {
     try {
       const { alias, destinationUrl, status, notes, label } = req.body;
       const result = await storage.createLink({
@@ -66,13 +64,13 @@ export function createApp() {
 
       res.status(201).json(result);
     } catch (err: any) {
-      console.error('API POST /api/links error:', err);
+      console.error('API POST /links error:', err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Get single link from Firestore
-  app.get('/api/links/:alias', async (req: Request, res: Response) => {
+  apiRouter.get('/links/:alias', async (req: Request, res: Response) => {
     try {
       const alias = req.params.alias;
       const link = await storage.getByAlias(alias);
@@ -83,13 +81,13 @@ export function createApp() {
 
       res.json({ success: true, link });
     } catch (err: any) {
-      console.error(`API GET /api/links/${req.params.alias} error:`, err);
+      console.error(`API GET /links/${req.params.alias} error:`, err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Update link in Firestore
-  app.put('/api/links/:alias', async (req: Request, res: Response) => {
+  apiRouter.put('/links/:alias', async (req: Request, res: Response) => {
     try {
       const currentAlias = req.params.alias;
       const { newAlias, destinationUrl, status, notes, label } = req.body;
@@ -108,13 +106,13 @@ export function createApp() {
 
       res.json(result);
     } catch (err: any) {
-      console.error(`API PUT /api/links/${req.params.alias} error:`, err);
+      console.error(`API PUT /links/${req.params.alias} error:`, err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Delete link from Firestore (Deleted = Deleted)
-  app.delete('/api/links/:alias', async (req: Request, res: Response) => {
+  apiRouter.delete('/links/:alias', async (req: Request, res: Response) => {
     try {
       const alias = req.params.alias;
       const result = await storage.deleteLink(alias);
@@ -125,13 +123,13 @@ export function createApp() {
 
       res.json({ success: true, message: 'Link berjaya dipadam.' });
     } catch (err: any) {
-      console.error(`API DELETE /api/links/${req.params.alias} error:`, err);
+      console.error(`API DELETE /links/${req.params.alias} error:`, err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Track click & get destination from Firestore
-  app.post('/api/links/click/:alias', async (req: Request, res: Response) => {
+  apiRouter.post('/links/click/:alias', async (req: Request, res: Response) => {
     try {
       const alias = req.params.alias;
       const link = await storage.getByAlias(alias);
@@ -151,13 +149,13 @@ export function createApp() {
         clickCount: result.link?.clickCount ?? (link.clickCount + 1),
       });
     } catch (err: any) {
-      console.error(`API POST /api/links/click/${req.params.alias} error:`, err);
+      console.error(`API POST /links/click/${req.params.alias} error:`, err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Auth: Verify Admin PIN
-  app.post('/api/auth/verify-pin', async (req: Request, res: Response) => {
+  apiRouter.post('/auth/verify-pin', async (req: Request, res: Response) => {
     try {
       const { pin } = req.body;
       if (!pin) {
@@ -171,13 +169,13 @@ export function createApp() {
 
       res.json({ success: true, message: 'Admin access disahkan.' });
     } catch (err: any) {
-      console.error('API /api/auth/verify-pin error:', err);
+      console.error('API /auth/verify-pin error:', err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Auth: Change Admin PIN
-  app.post('/api/auth/change-pin', async (req: Request, res: Response) => {
+  apiRouter.post('/auth/change-pin', async (req: Request, res: Response) => {
     try {
       const { oldPin, newPin } = req.body;
       const result = await storage.changePin(oldPin, newPin);
@@ -188,13 +186,13 @@ export function createApp() {
 
       res.json({ success: true, message: 'Admin PIN berjaya ditukar.' });
     } catch (err: any) {
-      console.error('API /api/auth/change-pin error:', err);
+      console.error('API /auth/change-pin error:', err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
   // Settings
-  app.get('/api/settings', async (req: Request, res: Response) => {
+  apiRouter.get('/settings', async (req: Request, res: Response) => {
     try {
       const settings = await storage.getSettings();
       res.json({
@@ -205,12 +203,12 @@ export function createApp() {
         },
       });
     } catch (err: any) {
-      console.error('API GET /api/settings error:', err);
+      console.error('API GET /settings error:', err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
-  app.post('/api/settings', async (req: Request, res: Response) => {
+  apiRouter.post('/settings', async (req: Request, res: Response) => {
     try {
       const { displayDomain, redirectMode, adminPin } = req.body;
       const updates: any = {};
@@ -227,16 +225,13 @@ export function createApp() {
         },
       });
     } catch (err: any) {
-      console.error('API POST /api/settings error:', err);
+      console.error('API POST /settings error:', err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
   });
 
-  // =========================================================
-  // DIRECT SHORT LINK REDIRECT ROUTE (/r/:alias)
-  // =========================================================
-
-  app.get('/r/:alias', async (req: Request, res: Response) => {
+  // Handler for short link redirects
+  const handleRedirect = async (req: Request, res: Response) => {
     const alias = req.params.alias;
     const link = await storage.getByAlias(alias);
 
@@ -339,7 +334,14 @@ export function createApp() {
     }
 
     return res.redirect(302, link.destinationUrl);
-  });
+  };
+
+  // Mount API router under /api AND root (for serverless environments)
+  app.use('/api', apiRouter);
+  app.use('/', apiRouter);
+
+  // Short link redirect routes
+  app.get('/r/:alias', handleRedirect);
 
   return app;
 }
