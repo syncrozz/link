@@ -89,6 +89,8 @@ export default function App() {
 
       if (linksRes.success && linksRes.links) {
         setLinks(linksRes.links);
+      } else if (!linksRes.success && linksRes.error) {
+        showToast(linksRes.error, 'error');
       }
 
       if (settingsRes.success && settingsRes.settings?.displayDomain) {
