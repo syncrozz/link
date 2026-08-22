@@ -1,4 +1,4 @@
-import { Link2, Shield, ShieldCheck, Settings, RefreshCw, Download } from 'lucide-react';
+import { Shield, ShieldCheck, Settings, RefreshCw, Download } from 'lucide-react';
 
 interface NavbarProps {
   isAdmin: boolean;
@@ -26,9 +26,11 @@ export function Navbar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-sm shadow-emerald-500/10">
-            <Link2 className="w-5 h-5" />
-          </div>
+          <img
+            src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png"
+            alt="SYNCROZZ Link"
+            className="w-10 h-10 rounded-xl object-contain shadow-sm shadow-emerald-500/10"
+          />
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-lg tracking-tight text-white">SYNCROZZ Link</span>

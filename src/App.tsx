@@ -303,7 +303,11 @@ export default function App() {
       <footer className="border-t border-[#27272A] bg-[#121214]/60 py-6 text-center text-xs text-zinc-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Link2 className="w-4 h-4 text-emerald-400" />
+            <img
+              src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png"
+              alt="SYNCROZZ Link"
+              className="w-4 h-4 rounded object-contain"
+            />
             <span className="font-semibold text-zinc-300">SYNCROZZ Link v1.0</span>
             <span>— Simple, Fast & Authoritative</span>
           </div>

@@ -76583,6 +76583,7 @@ function createApp() {
         </head>
         <body>
           <div class="card">
+            <img src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png" alt="SYNCROZZ Link" style="width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 16px auto; display: block;" />
             <span class="badge">404 Not Found</span>
             <h1>Link Tidak Ditemui</h1>
             <p>Pautan pendek yang anda cari tidak wujud atau telah dipadam.</p>
@@ -76614,6 +76615,7 @@ function createApp() {
         </head>
         <body>
           <div class="card">
+            <img src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png" alt="SYNCROZZ Link" style="width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 16px auto; display: block;" />
             <span class="badge">Status: Inactive</span>
             <h1>Link Ini Tidak Aktif</h1>
             <p>Pautan pendek ini telah dinyahaktifkan oleh pentadbir sistem.</p>
@@ -76645,6 +76647,7 @@ function createApp() {
         </head>
         <body>
           <div class="card">
+            <img src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png" alt="SYNCROZZ Link" style="width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 16px auto; display: block;" />
             <div class="spinner"></div>
             <h1>Mengarahkan anda ke destinasi...</h1>
             <p>${link.destinationUrl}</p>

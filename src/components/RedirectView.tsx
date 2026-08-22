@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { trackClick } from '../lib/api.ts';
-import { AlertCircle, ExternalLink, ArrowLeft, Loader2, ShieldAlert } from 'lucide-react';
+import { ExternalLink, ArrowLeft, ShieldAlert } from 'lucide-react';
 
 interface RedirectViewProps {
   alias: string;
@@ -56,9 +56,11 @@ export function RedirectView({ alias, onGoHome }: RedirectViewProps) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center p-4">
         <div className="bg-[#18181B] border border-[#27272A] rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
-          <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Loader2 className="w-6 h-6 animate-spin" />
-          </div>
+          <img
+            src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png"
+            alt="SYNCROZZ Link"
+            className="w-12 h-12 rounded-xl object-contain mx-auto mb-4"
+          />
           <h2 className="text-xl font-bold text-white mb-2">Mengarahkan ke destinasi...</h2>
           <p className="text-xs text-zinc-400 font-mono mb-4">/{alias}</p>
 
@@ -113,9 +115,11 @@ export function RedirectView({ alias, onGoHome }: RedirectViewProps) {
   return (
     <div className="min-h-[70vh] flex items-center justify-center p-4">
       <div className="bg-[#18181B] border border-[#27272A] rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
-        <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto mb-4">
-          <AlertCircle className="w-6 h-6" />
-        </div>
+        <img
+          src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png"
+          alt="SYNCROZZ Link"
+          className="w-12 h-12 rounded-xl object-contain mx-auto mb-4"
+        />
         <span className="inline-block px-3 py-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full text-xs font-semibold mb-3">
           404 Not Found
         </span>
