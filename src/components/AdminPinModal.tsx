@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Shield, KeyRound, Lock, Unlock, X, Check, AlertCircle } from 'lucide-react';
 import { verifyAdminPin, changeAdminPin } from '../lib/api.ts';
 
@@ -25,6 +25,23 @@ export function AdminPinModal({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const pinInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus and reset state when opened
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+      setSuccess(null);
+      setPin('');
+      // If not admin, always show login tab
+      if (!isAdmin) {
+        setActiveTab('login');
+      }
+      setTimeout(() => {
+        pinInputRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen, isAdmin]);
 
   if (!isOpen) return null;
 
@@ -45,6 +62,7 @@ export function AdminPinModal({
         onClose();
       } else {
         setError(res.error || 'PIN admin tidak tepat.');
+        pinInputRef.current?.select();
       }
     } catch {
       setError('Ralat sambungan ke pelayan.');
@@ -104,41 +122,44 @@ export function AdminPinModal({
           </div>
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800 transition-colors"
+            className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab switch */}
-        {isAdmin && (
-          <div className="flex rounded-xl bg-[#101012] p-1 border border-[#27272A] mt-4 mb-2">
-            <button
-              onClick={() => {
-                setActiveTab('login');
-                setError(null);
-                setSuccess(null);
-              }}
-              className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-                activeTab === 'login' ? 'bg-emerald-500 text-zinc-950 font-bold' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              Status Akses
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('changePin');
-                setError(null);
-                setSuccess(null);
-              }}
-              className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-                activeTab === 'changePin' ? 'bg-emerald-500 text-zinc-950 font-bold' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              Tukar PIN
-            </button>
-          </div>
-        )}
+        <div className="flex rounded-xl bg-[#101012] p-1 border border-[#27272A] mt-4 mb-2">
+          <button
+            onClick={() => {
+              setActiveTab('login');
+              setError(null);
+              setSuccess(null);
+              setTimeout(() => pinInputRef.current?.focus(), 50);
+            }}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'login'
+                ? 'bg-emerald-500 text-zinc-950 font-bold shadow-xs'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            {isAdmin ? 'Status & Log Masuk' : 'Masukkan PIN'}
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('changePin');
+              setError(null);
+              setSuccess(null);
+            }}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'changePin'
+                ? 'bg-emerald-500 text-zinc-950 font-bold shadow-xs'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            Tukar PIN
+          </button>
+        </div>
 
         {/* Tab 1: Login / Status */}
         {activeTab === 'login' && (
@@ -148,49 +169,49 @@ export function AdminPinModal({
                 <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-center gap-3">
                   <Unlock className="w-5 h-5 text-emerald-400 shrink-0" />
                   <div>
-                    <h4 className="text-xs font-bold text-emerald-300">Admin Mode Aktif</h4>
+                    <h4 className="text-xs font-bold text-emerald-300">Admin Mode Sedang Aktif</h4>
                     <p className="text-[11px] text-emerald-400/80 mt-0.5">
-                      Anda mempunyai kebenaran penuh untuk mencipta, mengedit, memadam, dan mengurus short links.
+                      Anda kini mempunyai kebenaran penuh untuk mencipta, mengedit, memadam, dan mengurus domain.
                     </p>
                   </div>
                 </div>
 
-                <button
-                  id="btn-admin-logout"
-                  onClick={() => {
-                    onLogout();
-                    onClose();
-                  }}
-                  className="w-full py-2.5 px-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold rounded-xl border border-[#27272A] transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Kunci / Log Keluar Admin</span>
-                </button>
+                <div className="pt-1">
+                  <button
+                    id="btn-admin-logout"
+                    onClick={() => {
+                      onLogout();
+                      setActiveTab('login');
+                    }}
+                    className="w-full py-2.5 px-4 bg-zinc-800 hover:bg-rose-950/60 hover:border-rose-500/40 hover:text-rose-200 text-zinc-200 text-xs font-semibold rounded-xl border border-[#27272A] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>Kunci / Log Keluar Admin</span>
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleLogin} className="space-y-4">
-                <p className="text-xs text-zinc-400">
-                  Masukkan PIN Pentadbir untuk mengakses fungsi pengurusan penuh.
-                </p>
-
                 <div>
-                  <label className="block text-xs font-semibold uppercase text-zinc-300 mb-1.5">
-                    Admin PIN
+                  <label htmlFor="input-admin-pin" className="block text-xs font-semibold uppercase text-zinc-300 mb-1.5">
+                    Masukkan PIN Pentadbir
                   </label>
                   <div className="relative">
                     <input
+                      ref={pinInputRef}
                       id="input-admin-pin"
                       type="password"
+                      inputMode="numeric"
                       value={pin}
                       onChange={(e) => {
                         setPin(e.target.value);
                         if (error) setError(null);
                       }}
-                      placeholder="••••••••"
+                      placeholder="Masukkan PIN anda..."
                       autoFocus
-                      className="w-full bg-[#101012] border border-[#27272A] text-white rounded-xl px-4 py-2.5 text-sm font-mono tracking-widest focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-[#101012] border border-[#27272A] text-white placeholder:text-zinc-600 rounded-xl px-4 py-3 text-base font-mono tracking-widest focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
-                    <KeyRound className="w-4 h-4 text-zinc-500 absolute right-3 top-3" />
+                    <KeyRound className="w-4 h-4 text-zinc-500 absolute right-3.5 top-3.5" />
                   </div>
                 </div>
 
@@ -204,8 +225,8 @@ export function AdminPinModal({
                 <button
                   id="btn-submit-pin"
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full py-2.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shadow-lg shadow-emerald-500/20"
+                  disabled={isLoading || !pin.trim()}
+                  className="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shadow-lg shadow-emerald-500/20"
                 >
                   {isLoading ? (
                     <div className="w-3.5 h-3.5 border-2 border-zinc-950/30 border-t-zinc-950 rounded-full animate-spin" />
@@ -223,7 +244,7 @@ export function AdminPinModal({
         {activeTab === 'changePin' && (
           <form onSubmit={handleChangePin} className="mt-4 space-y-3.5">
             <div>
-              <label className="block text-xs font-semibold uppercase text-zinc-300 mb-1">
+              <label htmlFor="input-old-pin" className="block text-xs font-semibold uppercase text-zinc-300 mb-1">
                 PIN Semasa
               </label>
               <input
@@ -231,13 +252,13 @@ export function AdminPinModal({
                 type="password"
                 value={oldPin}
                 onChange={(e) => setOldPin(e.target.value)}
-                placeholder="PIN lama"
+                placeholder="PIN semasa"
                 className="w-full bg-[#101012] border border-[#27272A] text-white rounded-xl px-3 py-2 text-xs font-mono tracking-wider focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase text-zinc-300 mb-1">
+              <label htmlFor="input-new-pin" className="block text-xs font-semibold uppercase text-zinc-300 mb-1">
                 PIN Baharu
               </label>
               <input
@@ -251,7 +272,7 @@ export function AdminPinModal({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase text-zinc-300 mb-1">
+              <label htmlFor="input-confirm-pin" className="block text-xs font-semibold uppercase text-zinc-300 mb-1">
                 Sahkan PIN Baharu
               </label>
               <input
@@ -281,7 +302,7 @@ export function AdminPinModal({
             <button
               id="btn-save-new-pin"
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !oldPin || !newPin || !confirmPin}
               className="w-full py-2.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shadow-lg shadow-emerald-500/20"
             >
               {isLoading ? (
@@ -297,3 +318,4 @@ export function AdminPinModal({
     </div>
   );
 }
+

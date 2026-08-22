@@ -18,7 +18,12 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [displayDomain, setDisplayDomain] = useState('link.syncrozz.com');
-  const [isAdmin, setIsAdmin] = useState(true); // Default true so lead dev/admin can immediately manage
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('syncrozz_admin_auth') === 'true';
+    }
+    return false;
+  });
 
   // PWA & Network State
   const [isOnline, setIsOnline] = useState<boolean>(() => {
@@ -330,10 +335,16 @@ export default function App() {
         onClose={() => setIsPinModalOpen(false)}
         onSuccessLogin={() => {
           setIsAdmin(true);
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('syncrozz_admin_auth', 'true');
+          }
           showToast('Akses Admin berjaya diaktifkan!', 'success');
         }}
         onLogout={() => {
           setIsAdmin(false);
+          if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('syncrozz_admin_auth');
+          }
           showToast('Admin dikunci.', 'success');
         }}
       />
