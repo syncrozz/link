@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "shortLinks": {
+      "title": "ShortLink",
+      "description": "Short links for redirection and analytics",
+      "type": "object",
+      "properties": {
+        "alias": { "type": "string", "description": "Unique URL alias" },
+        "destinationUrl": { "type": "string", "description": "Destination target URL" },
+        "label": { "type": "string", "description": "Optional label or description" },
+        "notes": { "type": "string", "description": "Optional notes" },
+        "clickCount": { "type": "number", "description": "Total redirection clicks" },
+        "status": { "type": "string", "enum": ["active", "inactive"], "description": "Status of the link" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" },
+        "lastClickedAt": { "type": "string", "format": "date-time", "description": "Last clicked timestamp" }
+      },
+      "required": ["alias", "destinationUrl", "clickCount", "status", "createdAt", "updatedAt"]
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "System settings and configuration",
+      "type": "object",
+      "properties": {
+        "displayDomain": { "type": "string" },
+        "adminPin": { "type": "string" },
+        "redirectMode": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/shortLinks/{alias}": {
+      "schema": "shortLinks",
+      "description": "Authoritative short links documents indexed by alias"
+    },
+    "/settings/{settingId}": {
+      "schema": "settings",
+      "description": "App configuration settings"
+    }
+  }
+}
