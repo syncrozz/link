@@ -32,7 +32,7 @@ export interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   displayDomain: 'link.syncrozz.com',
-  adminPin: 'admin123',
+  adminPin: '5313',
   redirectMode: 'direct',
 };
 

@@ -170,7 +170,7 @@ export function AdminPinModal({
             ) : (
               <form onSubmit={handleLogin} className="space-y-4">
                 <p className="text-xs text-zinc-400">
-                  Masukkan PIN Pentadbir untuk mengakses fungsi pengurusan penuh (Default: <code className="text-emerald-400 font-mono">admin123</code>).
+                  Masukkan PIN Pentadbir untuk mengakses fungsi pengurusan penuh.
                 </p>
 
                 <div>
