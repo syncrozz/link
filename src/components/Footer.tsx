@@ -24,11 +24,11 @@ export function Footer({ onOpenSupport }: FooterProps) {
               e.preventDefault();
               handleSupportClick(e);
             }}
-            className="group inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-white text-zinc-900 hover:bg-zinc-100 active:scale-95 border border-zinc-200 shadow-sm hover:shadow transition-all duration-200 cursor-pointer"
+            className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-zinc-800/60 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-700/60 hover:border-zinc-600 active:scale-95 transition-all duration-200 cursor-pointer"
             title="Sokong Inovasi Ini"
           >
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 group-hover:scale-110 transition-transform duration-200" />
-            <span>Sokong Inovasi Ini ❤️</span>
+            <Heart className="w-3.5 h-3.5 text-rose-400 group-hover:fill-rose-400/30 transition-all duration-200" />
+            <span>Sokong Inovasi Ini</span>
           </a>
         </div>
 
