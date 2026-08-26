@@ -9,6 +9,7 @@ interface NavbarProps {
   isLoading: boolean;
   canInstallPwa?: boolean;
   onInstallPwa?: () => void;
+  onGoHome?: () => void;
 }
 
 export function Navbar({
@@ -20,20 +21,24 @@ export function Navbar({
   isLoading,
   canInstallPwa,
   onInstallPwa,
+  onGoHome,
 }: NavbarProps) {
   return (
     <header className="sticky top-0 z-40 bg-[#0A0A0B]/90 backdrop-blur-md border-b border-[#27272A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <div className="flex items-center gap-3">
+        <div
+          onClick={onGoHome}
+          className={`flex items-center gap-3 ${onGoHome ? 'cursor-pointer select-none group' : ''}`}
+        >
           <img
             src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png"
             alt="SYNCROZZ Link"
-            className="w-10 h-10 rounded-xl object-contain shadow-sm shadow-emerald-500/10"
+            className="w-10 h-10 rounded-xl object-contain shadow-sm shadow-emerald-500/10 group-hover:scale-105 transition-transform"
           />
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-lg tracking-tight text-white">SYNCROZZ Link</span>
+              <span className="font-bold text-lg tracking-tight text-white group-hover:text-emerald-400 transition-colors">SYNCROZZ Link</span>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
                 v1.0
               </span>

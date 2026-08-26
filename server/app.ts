@@ -128,8 +128,8 @@ export function createApp() {
     }
   });
 
-  // Track click & get destination from Firestore
-  apiRouter.post('/links/click/:alias', async (req: Request, res: Response) => {
+  // Track click & get destination from Firestore (supports both route styles)
+  const handleTrackClick = async (req: Request, res: Response) => {
     try {
       const alias = req.params.alias;
       const link = await storage.getByAlias(alias);
@@ -149,10 +149,13 @@ export function createApp() {
         clickCount: result.link?.clickCount ?? (link.clickCount + 1),
       });
     } catch (err: any) {
-      console.error(`API POST /links/click/${req.params.alias} error:`, err);
+      console.error(`API POST track click for ${req.params.alias} error:`, err);
       res.status(500).json({ success: false, error: err.message || 'Internal server error' });
     }
-  });
+  };
+
+  apiRouter.post('/links/click/:alias', handleTrackClick);
+  apiRouter.post('/links/:alias/click', handleTrackClick);
 
   // Auth: Verify Admin PIN
   apiRouter.post('/auth/verify-pin', async (req: Request, res: Response) => {
