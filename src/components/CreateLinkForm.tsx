@@ -80,7 +80,13 @@ export function CreateLinkForm({ displayDomain, onLinkCreated }: CreateLinkFormP
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        setErrorMessage(data.error || 'Gagal mencipta short link.');
+        let msg = data.error || 'Gagal mencipta short link.';
+        if (msg.includes('5 NOT_FOUND') || msg.includes('not-found')) {
+          msg = 'Pangkalan data sedang dimuatkan atau pautan tidak ditemui. Sila cuba sebentar lagi.';
+        } else if (msg.includes('ALREADY_EXISTS') || msg.toLowerCase().includes('alias ini telah digunakan')) {
+          msg = 'Alias ini telah digunakan. Sila gunakan custom alias yang lain.';
+        }
+        setErrorMessage(msg);
         setIsLoading(false);
         return;
       }

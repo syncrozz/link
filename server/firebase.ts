@@ -1,5 +1,7 @@
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import type { FirebaseApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore';
 import fs from 'fs';
 import path from 'path';
 
@@ -17,15 +19,15 @@ function loadFirebaseConfig() {
     }
   }
 
-  // Fallback to environment variables if present, otherwise default to configured values
+  // Fallback to environment variables if present, otherwise default to configured provisioned values
   return {
-    projectId: process.env.FIREBASE_PROJECT_ID || 'syncrozz-platform',
-    appId: process.env.FIREBASE_APP_ID || '1:165207391688:web:e33d816413e8a927c4d4fd',
-    apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyAILrcL4QlS-EwpitezwRKzxq9dK7B_Wvw',
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'syncrozz-platform.firebaseapp.com',
-    firestoreDatabaseId: process.env.FIREBASE_DATABASE_ID || '(default)',
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'syncrozz-platform.firebasestorage.app',
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '165207391688',
+    projectId: process.env.FIREBASE_PROJECT_ID || 'gen-lang-client-0739778545',
+    appId: process.env.FIREBASE_APP_ID || '1:592122598840:web:8877fee7a78426ac1feb4d',
+    apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyDf_pqCAHfWSS2vvzpXYVHMlFbKuBpWKBk',
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'gen-lang-client-0739778545.firebaseapp.com',
+    firestoreDatabaseId: process.env.FIREBASE_DATABASE_ID || 'ai-studio-link-ab67e208-5996-4549-abf2-eea242c083d8',
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'gen-lang-client-0739778545.firebasestorage.app',
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '592122598840',
   };
 }
 

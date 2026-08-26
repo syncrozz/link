@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "projectId": "gen-lang-client-0739778545",
   "appId": "1:592122598840:web:8877fee7a78426ac1feb4d",
   "apiKey": "AIzaSyDf_pqCAHfWSS2vvzpXYVHMlFbKuBpWKBk",
@@ -9,16 +8,5 @@
   "messagingSenderId": "592122598840",
   "measurementId": "",
   "oAuthClientId": "592122598840-s7lpfj27a5jlorfr66ld7ua42qnigujc.apps.googleusercontent.com",
-=======
-  "projectId": "syncrozz-platform",
-  "appId": "1:165207391688:web:e33d816413e8a927c4d4fd",
-  "apiKey": "AIzaSyAILrcL4QlS-EwpitezwRKzxq9dK7B_Wvw",
-  "authDomain": "syncrozz-platform.firebaseapp.com",
-  "firestoreDatabaseId": "(default)",
-  "storageBucket": "syncrozz-platform.firebasestorage.app",
-  "messagingSenderId": "165207391688",
-  "measurementId": "G-L8TM5MX4YD",
-  "oAuthClientId": "",
->>>>>>> ab995edd66f75a6f750643ae943eff05a985036f
   "recaptchaSiteKey": ""
 }

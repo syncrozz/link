@@ -12,9 +12,7 @@ const PRECACHE_ASSETS = [
   '/icon-512.png',
   '/icon-maskable-192.png',
   '/icon-maskable-512.png',
-  '/apple-touch-icon.png',
-  '/og-image.png',
-  '/assets/og/syncrozz-link-og.png'
+  '/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (event) => {
