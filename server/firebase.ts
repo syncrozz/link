@@ -19,13 +19,13 @@ function loadFirebaseConfig() {
 
   // Fallback to environment variables if present, otherwise default to configured values
   return {
-    projectId: process.env.FIREBASE_PROJECT_ID || 'subtle-furnace-sc9s2',
-    appId: process.env.FIREBASE_APP_ID || '1:915525482647:web:24f86b64a8802fdcbdd1d2',
-    apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyAUy9_lmgelOfuWvemEJQxbCqsFC3ksqyI',
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'subtle-furnace-sc9s2.firebaseapp.com',
-    firestoreDatabaseId: process.env.FIREBASE_DATABASE_ID || 'ai-studio-syncrozzlink-3409d9f0-66e7-4814-9e4e-847018e57c83',
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'subtle-furnace-sc9s2.firebasestorage.app',
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '915525482647',
+    projectId: process.env.FIREBASE_PROJECT_ID || 'syncrozz-platform',
+    appId: process.env.FIREBASE_APP_ID || '1:165207391688:web:e33d816413e8a927c4d4fd',
+    apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyAILrcL4QlS-EwpitezwRKzxq9dK7B_Wvw',
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'syncrozz-platform.firebaseapp.com',
+    firestoreDatabaseId: process.env.FIREBASE_DATABASE_ID || '(default)',
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'syncrozz-platform.firebasestorage.app',
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '165207391688',
   };
 }
 

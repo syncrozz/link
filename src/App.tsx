@@ -8,10 +8,12 @@ import { AdminPinModal } from './components/AdminPinModal.tsx';
 import { DomainSettingsModal } from './components/DomainSettingsModal.tsx';
 import { RedirectView } from './components/RedirectView.tsx';
 import { OfflineBanner } from './components/OfflineBanner.tsx';
+import { SupportView } from './components/SupportView.tsx';
+import { Footer } from './components/Footer.tsx';
 import { ShortLink } from './types.ts';
 import { fetchLinks, updateLink, deleteLink, getSettings } from './lib/api.ts';
 import { initInstallPromptListener, promptInstall } from './lib/pwa.ts';
-import { CheckCircle2, AlertCircle, Link2 } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
   const [links, setLinks] = useState<ShortLink[]>([]);
@@ -21,6 +23,14 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return sessionStorage.getItem('syncrozz_admin_auth') === 'true';
+    }
+    return false;
+  });
+
+  // Support section / view state via URL Hash
+  const [isSupportView, setIsSupportView] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.hash === '#support';
     }
     return false;
   });
@@ -65,6 +75,16 @@ export default function App() {
     }
     return null;
   });
+
+  // Listen to hashchange for #support and browser back/forward navigation
+  useEffect(() => {
+    const handleHashChange = () => {
+      setIsSupportView(window.location.hash === '#support');
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -131,6 +151,23 @@ export default function App() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  // Navigation handlers for Support Experience
+  const handleOpenSupport = () => {
+    setIsSupportView(true);
+    if (window.location.hash !== '#support') {
+      window.history.pushState(null, '', '#support');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleReturnToPlatform = () => {
+    setIsSupportView(false);
+    if (window.location.hash) {
+      window.history.pushState(null, '', window.location.pathname);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Trigger PWA installation dialog
   const handleInstallPwa = async () => {
@@ -273,6 +310,7 @@ export default function App() {
         isLoading={isLoading}
         canInstallPwa={canInstallPwa}
         onInstallPwa={handleInstallPwa}
+        onGoHome={isSupportView ? handleReturnToPlatform : undefined}
       />
 
       {/* Offline Status Warning Banner */}
@@ -280,42 +318,33 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Create Short Link Form */}
-        <CreateLinkForm
-          displayDomain={displayDomain}
-          onLinkCreated={handleLinkCreated}
-        />
+        {isSupportView ? (
+          <SupportView onReturn={handleReturnToPlatform} />
+        ) : (
+          <>
+            {/* Create Short Link Form */}
+            <CreateLinkForm
+              displayDomain={displayDomain}
+              onLinkCreated={handleLinkCreated}
+            />
 
-        {/* Short Links Management Dashboard */}
-        <AdminDashboard
-          links={links}
-          displayDomain={displayDomain}
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          onEdit={(link) => setEditingLink(link)}
-          onDelete={(link) => setDeletingLink(link)}
-          onToggleStatus={handleToggleStatus}
-          isAdmin={isAdmin}
-        />
+            {/* Short Links Management Dashboard */}
+            <AdminDashboard
+              links={links}
+              displayDomain={displayDomain}
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              onEdit={(link) => setEditingLink(link)}
+              onDelete={(link) => setDeletingLink(link)}
+              onToggleStatus={handleToggleStatus}
+              isAdmin={isAdmin}
+            />
+          </>
+        )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-[#27272A] bg-[#121214]/60 py-6 text-center text-xs text-zinc-400">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <img
-              src="https://raw.githubusercontent.com/syncrozz/syncrozz-assets/main/logo/Link/android-chrome-192x192.png"
-              alt="SYNCROZZ Link"
-              className="w-4 h-4 rounded object-contain"
-            />
-            <span className="font-semibold text-zinc-300">SYNCROZZ Link v1.0</span>
-            <span>— Simple, Fast & Authoritative</span>
-          </div>
-          <p className="text-[11px] text-zinc-500 font-mono">
-            link.syncrozz.com • Production Ready Short-link Platform
-          </p>
-        </div>
-      </footer>
+      {/* Modern Footer with Support CTA and Developer Credit */}
+      <Footer onOpenSupport={handleOpenSupport} />
 
       {/* Modals */}
       <EditLinkModal
