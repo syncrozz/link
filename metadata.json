@@ -1,8 +1,1 @@
-{
-  "name": "SYNCROZZ Link 1.0",
-  "description": "Platform short-link yang simple, pantas, dan production-ready untuk pengurusan pautan dan redirect segera.",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
-}
+{"name":"link","description":"Platform short-link yang simple, pantas, dan production-ready untuk pengurusan pautan dan redirect segera.","requestFramePermissions":[],"majorCapabilities":["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]}
